@@ -23,6 +23,9 @@ class TeachersTeachCourses(models.Model):
 
 	year = models.IntegerField(null = True)
 	semester = models.IntegerField(null = True)
+	
+	students = models.ManyToManyField(Student, related_name = 'Students')
+	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs')
 
 	def __str__(self):
 		return self.course.name
