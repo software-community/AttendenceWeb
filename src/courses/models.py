@@ -9,8 +9,6 @@ class Course(models.Model):
 	code = models.CharField(max_length = 6, null = True)
 
 	teachers = models.ManyToManyField(Teacher, through = 'TeachersTeachCourses')
-	students = models.ManyToManyField(Student, related_name = 'Students')
-	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs')
 
 	def __str__(self):
 		return self.name
@@ -20,6 +18,8 @@ class TeachersTeachCourses(models.Model):
 
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
 	course = models.ForeignKey(Course, on_delete = models.CASCADE)
+	students = models.ManyToManyField(Student, related_name = 'Students')
+	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs')
 
 	year = models.IntegerField(null = True)
 	semester = models.IntegerField(null = True)
