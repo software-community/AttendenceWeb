@@ -13,6 +13,9 @@ class Lecture(models.Model):
 
 	student_attendance = models.ManyToManyField(Student, through = 'StudentsAttendLectures')
 
+	def __str__(self):
+		return str(self.course) + str(begin) + "-" + str(end)
+
 
 class StudentsAttendLectures(models.Model):
 
@@ -22,11 +25,17 @@ class StudentsAttendLectures(models.Model):
 	present = models.BooleanField(default = False)
 	# attendance_queries = models.ManyToManyField(LectureImage, through = 'StudentAttendanceQueries')
 
+	def __str__(self):
+		return str(lecture) + "-" + str(student)
+
 class LectureImage(models.Model):
 
 	lecture = models.ForeignKey(Lecture, on_delete = models.CASCADE)
 	image = models.ImageField()
 	timestamp = models.DateTimeField(auto_now_add = True)
+
+	def __str__(self):
+		return str(lecture) + str(timestamp)
 
 
 

@@ -12,6 +12,9 @@ class Course(models.Model):
 	students = models.ManyToManyField(Student, related_name = 'Students')
 	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs')
 
+	def __str__(self):
+		return self.name
+
 
 class TeachersTeachCourses(models.Model):
 
@@ -20,5 +23,8 @@ class TeachersTeachCourses(models.Model):
 
 	year = models.IntegerField(null = True)
 	semester = models.IntegerField(null = True)
+
+	def __str__(self):
+		return self.course.name
 
 

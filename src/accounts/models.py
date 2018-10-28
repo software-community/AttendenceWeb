@@ -10,6 +10,9 @@ class Profile(models.Model):
 	is_student = models.BooleanField(default = False)
 	is_teacher = models.BooleanField(default = False)	
 
+	def __str__(self):
+		return self.user.username
+
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
@@ -27,9 +30,15 @@ class Student(models.Model):
 	"""
 	student = models.OneToOneField(Profile, on_delete = models.CASCADE)
 
+	def __str__(self):
+		return self.student.user.username
+
 
 class Teacher(models.Model):
 	"""
 	Teacher Model
 	"""
 	teacher = models.OneToOneField(Profile, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return self.teacher.user.username
