@@ -2,15 +2,22 @@ from django.db import models
 
 from accounts.models import Teacher, Student
 from courses.models import Course, TeachersTeachCourses
+import os,uuid
 
 # Create your models here.
+
+def get_file_path(instance, filename):
+	ext = filename.split('.')[-1]
+	filename = "%s_%s.%s" % (instance.lecture.begin,instance.lecture.end, ext)
+	foldername = "%s_%s" % (instance.lecture.course,instance.lecture.course.teacher)
+	return os.path.join(foldername, filename)
 
 class Lecture(models.Model):
 
 	course = models.ForeignKey(TeachersTeachCourses, on_delete = models.CASCADE)
 
-	begin = models.DateTimeField(null = True,blank=True)
-	end = models.DateTimeField(null = True,blank=True)
+	begin = models.DateTimeField()
+	end = models.DateTimeField()
 
 	student_attendance = models.ManyToManyField(Student, through = 'StudentsAttendLectures')
 
@@ -41,7 +48,7 @@ class StudentsAttendLectures(models.Model):
 class LectureImage(models.Model):
 
 	lecture = models.ForeignKey(Lecture, on_delete = models.CASCADE)
-	image = models.ImageField()
+	image = models.ImageField(upload_to=get_file_path)
 	timestamp = models.DateTimeField(auto_now_add = True)
 
 
