@@ -8,6 +8,7 @@ from courses.models import Course, TeachersTeachCourses
 class Lecture(models.Model):
 
 	course = models.ForeignKey(TeachersTeachCourses, on_delete = models.CASCADE)
+
 	begin = models.DateTimeField(null = True,blank=True)
 	end = models.DateTimeField(null = True,blank=True)
 
@@ -32,8 +33,10 @@ class StudentsAttendLectures(models.Model):
 	present = models.BooleanField(default = False)
 	# attendance_queries = models.ManyToManyField(LectureImage, through = 'StudentAttendanceQueries')
 
+
 	#def __str__(self):
 	#	return str(lecture) + "-" + str(student)
+
 
 class LectureImage(models.Model):
 
@@ -41,9 +44,7 @@ class LectureImage(models.Model):
 	image = models.ImageField()
 	timestamp = models.DateTimeField(auto_now_add = True)
 
+
 	#def __str__(self):
 	#	return str(lecture) + str(timestamp)
-
-
-
 
