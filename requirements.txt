@@ -1,0 +1,10 @@
+certifi==2018.10.15
+Django==2.1.2
+django-filter==2.0.0
+djangorestframework==3.9.0
+Markdown==3.0.1
+Pillow==5.3.0
+pytz==2018.6
+google
+google-cloud
+google-cloud-vision
