@@ -16,7 +16,7 @@ admin.site.register(Profile, ProfileAdminModel)
 
 class StudentAdminModel(admin.ModelAdmin):
 
-	list_display = ["student"]
+	list_display = ["student", "id"]
 
 	class Meta:
 		model = Student

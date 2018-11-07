@@ -21,8 +21,8 @@ class Lecture(models.Model):
 
 	student_attendance = models.ManyToManyField(Student, through = 'StudentsAttendLectures')
 
-	#def __str__(self):
-	#	return str(self.course) + str(begin) + "-" + str(end)
+	def __str__(self):
+		return str(self.course) + "-" + str(self.id)
 		
 	def save(self, *args, **kwargs):
 		if not self.begin:
@@ -43,6 +43,11 @@ class StudentsAttendLectures(models.Model):
 
 	#def __str__(self):
 	#	return str(lecture) + "-" + str(student)
+
+	def is_owner(self, user):
+		if self.lecture__course__teacher__teacher__user == user:
+			return True
+		return False
 
 
 class LectureImage(models.Model):

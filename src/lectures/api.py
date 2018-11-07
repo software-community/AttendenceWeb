@@ -5,6 +5,7 @@ from .models import Lecture, LectureImage, StudentsAttendLectures
 
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
+from .permissions import IsOwnerOrReadOnly
 from django.contrib.auth.models import User
 from rest_framework import generics, filters
 from rest_framework import viewsets
@@ -33,8 +34,8 @@ class StudentsAttendLecturesViewSet(viewsets.ModelViewSet):
 	
 	queryset = StudentsAttendLectures.objects.all()
 	serializer_class = StudentsAttendLecturesSerializer
-	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (permissions.IsAuthenticated,)
+	authentication_classes = ()
+	permission_classes = (IsOwnerOrReadOnly, )
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('lecture', 'student',)

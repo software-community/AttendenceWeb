@@ -26,6 +26,6 @@ class TeachersTeachCourses(models.Model):
 	
 
 	def __str__(self):
-		return self.course.name
+		return self.course.name + "-" + str(self.teacher)
 
 
