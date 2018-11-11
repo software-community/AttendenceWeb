@@ -31,6 +31,11 @@ class Lecture(models.Model):
 			self.end = None
 		super(Lecture, self).save(*args, **kwargs)
 
+	def is_owner(self, user):
+		if self.course__teacher__teacher__user == user:
+			return True
+		return False
+
 
 class StudentsAttendLectures(models.Model):
 
@@ -56,6 +61,11 @@ class LectureImage(models.Model):
 	image = models.ImageField(upload_to=get_file_path)
 	timestamp = models.DateTimeField(auto_now_add = True)
 
+
+	def is_owner(self, user):
+		if self.lecture__course__teacher__teacher__user == user:
+			return True
+		return False
 
 	#def __str__(self):
 	#	return str(lecture) + str(timestamp)

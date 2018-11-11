@@ -13,6 +13,12 @@ class Course(models.Model):
 	def __str__(self):
 		return self.name
 
+	def is_owner(self, user):
+		return user.is_staff
+
+
+
+
 
 class TeachersTeachCourses(models.Model):
 
@@ -27,5 +33,10 @@ class TeachersTeachCourses(models.Model):
 
 	def __str__(self):
 		return self.course.name + "-" + str(self.teacher)
+
+	def is_owner(self, user):
+		if self.teacher__teacher__user == user:
+			return True
+		return False
 
 

@@ -14,7 +14,8 @@ from firebase_admin import auth
 def tokenAuth(request):
 
     if request.method == 'POST':
-        token = request.POST.get('id_token')
+        # print(request.META['HTTP_AUTHORIZATION'])
+        token = request.META['HTTP_AUTHORIZATION']
         decoded_token = auth.verify_id_token(token)
         uid = decoded_token['uid']
         user = auth.get_user(uid)
