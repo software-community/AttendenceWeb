@@ -35,7 +35,7 @@ class TeachersTeachCourses(models.Model):
 		return self.course.name + "-" + str(self.teacher)
 
 	def is_owner(self, user):
-		if self.teacher__teacher__user == user:
+		if self.teacher.teacher.user == user:
 			return True
 		return False
 

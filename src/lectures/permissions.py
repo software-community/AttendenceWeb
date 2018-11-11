@@ -42,17 +42,18 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
 
-        if request.method in permissions.SAFE_METHODS:
-            return True
+        # if request.method in permissions.SAFE_METHODS:
+        #     return True
 
         try:
             token = request.META['HTTP_AUTHORIZATION']
-            print("Token: ", token)
+            # print("Token: ", token)
             decoded_token = auth.verify_id_token(token)
-            print(decoded_token)
+            # print(decoded_token)
             uid = decoded_token['uid']
             user = auth.get_user(uid)
             django_user = get_object_or_404(User, email=user.email)
+            print(django_user)
             return obj.is_owner(django_user)
         except:
             return False

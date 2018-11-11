@@ -32,7 +32,7 @@ class Lecture(models.Model):
 		super(Lecture, self).save(*args, **kwargs)
 
 	def is_owner(self, user):
-		if self.course__teacher__teacher__user == user:
+		if self.course.teacher.teacher.user == user:
 			return True
 		return False
 
@@ -50,7 +50,7 @@ class StudentsAttendLectures(models.Model):
 	#	return str(lecture) + "-" + str(student)
 
 	def is_owner(self, user):
-		if self.lecture__course__teacher__teacher__user == user:
+		if self.lecture.course.teacher.teacher.user == user:
 			return True
 		return False
 
@@ -63,7 +63,7 @@ class LectureImage(models.Model):
 
 
 	def is_owner(self, user):
-		if self.lecture__course__teacher__teacher__user == user:
+		if self.lecture.course.teacher.teacher.user == user:
 			return True
 		return False
 
