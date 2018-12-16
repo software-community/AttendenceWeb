@@ -18,8 +18,6 @@ class Course(models.Model):
 
 
 
-
-
 class TeachersTeachCourses(models.Model):
 
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)

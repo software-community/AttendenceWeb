@@ -20,6 +20,7 @@ from rest_condition import Or
 
 from .serializers import LectureImageSerializer, LectureSerializer, StudentsAttendLecturesSerializer
 
+from .filters import GetCurrentLectures
 
 class LectureViewSet(viewsets.ModelViewSet):
 	
@@ -29,7 +30,7 @@ class LectureViewSet(viewsets.ModelViewSet):
 	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
-	filter_fields = ('course',)
+	filter_fields = ('course', 'begin')
 
 class StudentsAttendLecturesViewSet(viewsets.ModelViewSet):
 	
@@ -50,3 +51,6 @@ class LectureImageViewSet(viewsets.ModelViewSet):
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('lecture', )
+
+class StudentLectures(StudentsAttendLecturesViewSet):
+	filter_backends = (GetCurrentLectures,)

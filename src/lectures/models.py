@@ -4,6 +4,10 @@ from accounts.models import Teacher, Student
 from courses.models import Course, TeachersTeachCourses
 import os,uuid
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 # Create your models here.
 
 def get_file_path(instance, filename):
@@ -69,4 +73,15 @@ class LectureImage(models.Model):
 
 	#def __str__(self):
 	#	return str(lecture) + str(timestamp)
+
+@receiver(post_save, sender=Lecture)
+def create_attendance_table(sender, instance, created, **kwargs):
+	"""
+	When a lecture is created, create new entries to the student attend lectures table
+	"""
+	if created:
+		students = instance.course.students.all()
+		print(students)
+		for student in students:
+			StudentsAttendLectures.objects.create(lecture=instance, student = student)
 

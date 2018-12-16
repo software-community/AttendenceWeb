@@ -53,7 +53,6 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             uid = decoded_token['uid']
             user = auth.get_user(uid)
             django_user = get_object_or_404(User, email=user.email)
-            print(django_user)
             return obj.is_owner(django_user)
         except:
             return False

@@ -17,7 +17,7 @@ from rest_framework.filters import SearchFilter
 
 
 from .serializers import ProfileSerializer, StudentSerializer, TeacherSerializer
-
+from lectures.api import LectureViewSet
 
 class ProfileViewSet(viewsets.ModelViewSet):
 	
@@ -53,4 +53,5 @@ class TeacherViewSet(viewsets.ModelViewSet):
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('teacher',)
 	search_fields = ('teacher__user__first_name',)
+
 
