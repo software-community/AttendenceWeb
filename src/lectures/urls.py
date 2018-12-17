@@ -7,8 +7,9 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register('lecture', LectureViewSet)
 router.register('lecture-image', LectureImageViewSet)
-router.register('sal', StudentsAttendLecturesViewSet)
-router.register('student-lectures', StudentLectures)
+router.register('sal', StudentsAttendLecturesViewSet, base_name='sal')
+
+router.register('cur-att', StudentLectures, base_name='cur-att')
 
 
 
