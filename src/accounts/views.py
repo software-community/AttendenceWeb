@@ -45,5 +45,5 @@ def login(request):
             'first_name': display_name[0],
             'last_name': display_name[1]
         })
-        return HttpResponse({"profile_id": user.profile.id})
+        return HttpResponse({"profile_id": user.profile.id, "is_student": user.profile.is_student, "is_teacher": user.profile.is_teacher})
 

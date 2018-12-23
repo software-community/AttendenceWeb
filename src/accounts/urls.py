@@ -12,5 +12,6 @@ router.register('teacher', TeacherViewSet)
 
 urlpatterns = [
 	path('api/', include(router.urls)),
-	path('token-auth/', views.tokenAuth)
+	path('token-auth/', views.tokenAuth),
+	path('token-login/', views.login)
 ]
