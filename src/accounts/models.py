@@ -42,3 +42,21 @@ class Teacher(models.Model):
 
 	def __str__(self):
 		return self.teacher.user.username
+
+@receiver(post_save, sender=Profile)
+def update_profile(sender, instance, created, **kwargs):
+	"""
+	Creates a user profile just after a user is created
+	"""
+	if instance.is_student:
+		if not Student.objects.filter(student = instance).exists():
+			Student.objects.create(student=instance)
+			instance.student.save()
+
+	elif instance.is_teacher:
+		if not Teacher.objects.filter(teacher = instance).exists():
+			Teacher.objects.create(teacher=instance)
+			instance.teacher.save()
+
+
+
