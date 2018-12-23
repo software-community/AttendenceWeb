@@ -29,3 +29,21 @@ def tokenAuth(request):
         print(user.email)
         
     return HttpResponse("Sucess")
+
+@csrf_exempt
+def login(request):
+     if request.method == 'POST':
+        # print(request.META['HTTP_AUTHORIZATION'])
+        token = request.META['HTTP_AUTHORIZATION']
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+        user = auth.get_user(uid)
+        display_name = user.displayName.split(" ")
+        django_user, created = User.objects.get_or_create(email = user.email, defaults = {
+            'username': uid,
+            'password': 'iitropar',
+            'first_name': display_name[0],
+            'last_name': display_name[1]
+        })
+        return HttpResponse({"profile_id": user.profile.id})
+

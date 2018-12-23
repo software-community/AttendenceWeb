@@ -19,12 +19,16 @@ from rest_framework.filters import SearchFilter
 from .serializers import ProfileSerializer, StudentSerializer, TeacherSerializer
 from lectures.api import LectureViewSet
 
+from rest_condition import Or
+from lectures.permissions import WriteTokenOnly
+
+
 class ProfileViewSet(viewsets.ModelViewSet):
 	
 	queryset = Profile.objects.all()
 	serializer_class = ProfileSerializer
 	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('user', 'is_teacher', 'is_student',)
@@ -35,7 +39,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 	queryset = Student.objects.all()
 	serializer_class = StudentSerializer
 	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('student',)
@@ -48,7 +52,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
 	queryset = Teacher.objects.all()
 	serializer_class = TeacherSerializer
 	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (permissions.IsAuthenticated,)
+	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('teacher',)
