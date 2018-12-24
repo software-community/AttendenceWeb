@@ -38,12 +38,13 @@ def login(request):
         decoded_token = auth.verify_id_token(token)
         uid = decoded_token['uid']
         user = auth.get_user(uid)
-        display_name = user.displayName.split(" ")
+        # display_name = user.displayName.split(" ")
         django_user, created = User.objects.get_or_create(email = user.email, defaults = {
             'username': uid,
             'password': 'iitropar',
-            'first_name': display_name[0],
-            'last_name': display_name[1]
+            # 'first_name': display_name[0],
+            # 'last_name': display_name[1]
         })
-        return HttpResponse({"profile_id": user.profile.id, "is_student": user.profile.is_student, "is_teacher": user.profile.is_teacher})
+        print(django_user.profile.id)
+        return HttpResponse({"profile_id": django_user.profile.id, "is_student": django_user.profile.is_student, "is_teacher": django_user.profile.is_teacher})
 
