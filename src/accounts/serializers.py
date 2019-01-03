@@ -8,6 +8,7 @@ import datetime
 from lectures.models import Lecture, StudentsAttendLectures
 
 from django.db.models import F
+from django.db.models import Count
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -76,7 +77,8 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class TeacherSerializer(serializers.ModelSerializer):
 	courses = serializers.SerializerMethodField()
-	lecture_today = serializers.SerializerMethodField()
+	lecture_done = serializers.SerializerMethodField()
+	lecture_pending = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Teacher
@@ -86,14 +88,29 @@ class TeacherSerializer(serializers.ModelSerializer):
 		"""
 		Gets the list of courses the student is enrolled in
 		"""
-		queryset = list(TeachersTeachCourses.objects.filter(teacher = instance).values('id'))
-		queryset = [item['id'] for item in queryset]
+		queryset = list(TeachersTeachCourses.objects.filter(teacher = instance).values('id', 'course__code', 'course__name').annotate(students_count=Count('students')))
+		# queryset = [{
+		# 'id': item['id'],
+		# 'course_code': item['course__code'],
+		# } for item in queryset]
 		return queryset
 
-	def get_lecture_today(self, instance):
+	def get_lecture_done(self, instance):
 		"""
 		Gets the lectures that are today with attendance status
 		"""
+		today_time = datetime.datetime.now() 
 		today = datetime.datetime.now().date()
-		queryset = Lecture.objects.all().filter(begin__date = today, course__teacher = instance).values('id', 'course')
-		return list(queryset)
+
+		lectures = Lecture.objects.all().filter(begin__date = today, begin__lte = today_time)
+		return list(lectures)
+
+
+	def get_lecture_pending(self, instance):
+		"""
+		Gets the lectures that are today with attendance status
+		"""
+		today_time = datetime.datetime.now() 
+		today = datetime.datetime.now().date()
+		lectures = Lecture.objects.all().filter(begin__date = today, begin__gt = today_time)
+		return list(lectures)

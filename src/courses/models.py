@@ -23,7 +23,7 @@ class TeachersTeachCourses(models.Model):
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
 	course = models.ForeignKey(Course, on_delete = models.CASCADE)
 	students = models.ManyToManyField(Student, related_name = 'Students')
-	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs', blank = True, null = True)
+	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs', blank = True)
 
 	year = models.IntegerField(null = True)
 	semester = models.IntegerField(null = True)
