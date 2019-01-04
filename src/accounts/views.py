@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
@@ -46,5 +46,5 @@ def login(request):
             # 'last_name': display_name[1]
         })
         print(django_user.profile.id)
-        return HttpResponse({"profile_id": django_user.profile.id, "is_student": django_user.profile.is_student, "is_teacher": django_user.profile.is_teacher})
+        return JsonResponse({"profile_id": django_user.profile.id, "is_student": django_user.profile.is_student, "is_teacher": django_user.profile.is_teacher})
 

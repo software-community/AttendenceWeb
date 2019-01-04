@@ -7,9 +7,9 @@ from .models import Course, TeachersTeachCourses
 class CourseAdminModel(admin.ModelAdmin):
 	""" Admin Model """
 
-	list_display = ["name", "code"]
+	list_display = ["name", "code", "id"]
 
-	search_fields = ["name", "code"]
+	search_fields = ["name", "code", "id"]
 
 	class Meta:
 		model = Course
@@ -18,7 +18,7 @@ admin.site.register(Course, CourseAdminModel)
 
 class TeachersTeachCoursesAdminModel(admin.ModelAdmin):
 
-	list_display = ["teacher", "course", "year", "semester"]
+	list_display = ["teacher", "course", "year", "semester", "id"]
 
 	class Meta:
 		model = TeachersTeachCourses

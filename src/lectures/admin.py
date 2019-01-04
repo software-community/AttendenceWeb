@@ -7,7 +7,7 @@ from .models import Lecture, LectureImage, StudentsAttendLectures
 class LectureAdminModel(admin.ModelAdmin):
 	""" Admin Model """
 
-	list_display = ["course", "begin", "end"]
+	list_display = ["course", "begin", "end", "id"]
 
 	class Meta:
 		model = Lecture
@@ -16,7 +16,7 @@ admin.site.register(Lecture, LectureAdminModel)
 
 class LectureImageAdminModel(admin.ModelAdmin):
 
-	list_display = ["lecture", "image", "timestamp"]
+	list_display = ["lecture", "image", "timestamp", "id"]
 
 	class Meta:
 		model = LectureImage
@@ -26,7 +26,7 @@ admin.site.register(LectureImage, LectureImageAdminModel)
 
 class StudentsAttendLecturesModelAdmin(admin.ModelAdmin):
 
-	list_display = ["lecture", "student", "present"]
+	list_display = ["lecture", "student", "present", "id"]
 
 	class Meta:
 		model = StudentsAttendLectures

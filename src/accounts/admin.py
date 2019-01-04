@@ -5,7 +5,7 @@ from .models import Profile, Student, Teacher
 class ProfileAdminModel(admin.ModelAdmin):
 	""" Admin Model """
 
-	list_display = ["user"]
+	list_display = ["user", "id"]
 
 	search_fields = ["user", "user.email"]
 
@@ -26,7 +26,7 @@ admin.site.register(Student, StudentAdminModel)
 
 class TeacherAdminModel(admin.ModelAdmin):
 
-	list_display = ["teacher"]
+	list_display = ["teacher", "id"]
 
 	class Meta:
 		model = Teacher
