@@ -22,7 +22,7 @@ class TeachersTeachCourses(models.Model):
 
 	teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
 	course = models.ForeignKey(Course, on_delete = models.CASCADE)
-	students = models.ManyToManyField(Student, related_name = 'Students')
+	students = models.ManyToManyField(Student, related_name = 'Students', through = 'StudentAttendCourses')
 	teaching_assistants = models.ManyToManyField(Student, related_name = 'TAs', blank = True)
 
 	year = models.IntegerField(null = True)
@@ -36,5 +36,14 @@ class TeachersTeachCourses(models.Model):
 		if self.teacher.teacher.user == user:
 			return True
 		return False
+
+
+class StudentAttendCourses(models.Model):
+
+	student = models.ForeignKey(Student, on_delete = models.CASCADE)
+	course = models.ForeignKey(TeachersTeachCourses, on_delete = models.CASCADE)
+
+	def __str__(self):
+		return self.course.course.name + "-" + str(self.student)
 
 

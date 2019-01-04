@@ -11,4 +11,5 @@ router.register('ttc', TeachersTeachCoursesViewSet)
 
 urlpatterns = [
 	path('api/', include(router.urls)),
+	path('add-courses/', views.add_courses)
 ]

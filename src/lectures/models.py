@@ -1,12 +1,11 @@
 from django.db import models
 
 from accounts.models import Teacher, Student
-from courses.models import Course, TeachersTeachCourses
+from courses.models import Course, TeachersTeachCourses, StudentAttendCourses
 import os,uuid
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 
 # Create your models here.
 
@@ -74,14 +73,14 @@ class LectureImage(models.Model):
 	#def __str__(self):
 	#	return str(lecture) + str(timestamp)
 
-@receiver(post_save, sender=Lecture)
+@receiver(post_save, sender=StudentAttendCourses)
 def create_attendance_table(sender, instance, created, **kwargs):
 	"""
 	When a lecture is created, create new entries to the student attend lectures table
 	"""
 	if created:
-		students = instance.course.students.all()
-		print(students)
-		for student in students:
-			StudentsAttendLectures.objects.create(lecture=instance, student = student)
+		lectures = Lecture.objects.filter(course = instance.course)
+		student = instance.student
+		for lecture in lectures:
+			StudentsAttendLectures.objects.create(lecture=lecture, student = student)
 
