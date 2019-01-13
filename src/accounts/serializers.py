@@ -9,6 +9,7 @@ from lectures.models import Lecture, StudentsAttendLectures
 
 from django.db.models import F
 from django.db.models import Count
+from django.db.models.functions import TruncTime
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -44,7 +45,7 @@ class StudentSerializer(serializers.ModelSerializer):
 		today = datetime.datetime.now().date()
 
 		lectures = Lecture.objects.all().filter(begin__date = today, begin__lte = today_time)
-		queryset = StudentsAttendLectures.objects.filter(student = instance, lecture__in = lectures).values('id', 'lecture', 'present', course_id = F('lecture__course'), code = F('lecture__course__course__code'))
+		queryset = StudentsAttendLectures.objects.filter(student = instance, lecture__in = lectures).annotate(time = TruncTime('lecture__begin')).values('id', 'lecture', 'present', 'time', course_id = F('lecture__course'), code = F('lecture__course__course__code'))
 		return list(queryset)
 
 	def get_lecture_pending(self, instance):
@@ -54,7 +55,7 @@ class StudentSerializer(serializers.ModelSerializer):
 		today_time = datetime.datetime.now() 
 		today = datetime.datetime.now().date()
 		lectures = Lecture.objects.all().filter(begin__date = today, begin__gt = today_time)
-		queryset = StudentsAttendLectures.objects.filter(student = instance, lecture__in = lectures).values('id', 'lecture', 'present', course_id = F('lecture__course'), code = F('lecture__course__course__code'))
+		queryset = StudentsAttendLectures.objects.filter(student = instance, lecture__in = lectures).annotate(time = TruncTime('lecture__begin')).values('id', 'lecture', 'present', 'time', course_id = F('lecture__course'), code = F('lecture__course__course__code'), start_time = F('lecture__begin'))
 		return list(queryset)
 
 	def get_attendance(self, course_id, instance):
