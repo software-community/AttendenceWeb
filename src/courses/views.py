@@ -68,9 +68,9 @@ def add_courses(request):
 
 						lecture, created = Lecture.objects.get_or_create(course = ttc, begin = cur_start_datetime, end = cur_end_datetime)
 
-			return JsonResponse({"status": "Done"})
+			return JsonResponse({"status": "Success", "student_code": course.student_code, "ta_code": course.ta_code})
 		except:
-			return JsonResponse({'status':'failure'})
+			return JsonResponse({'status':'Fail'})
 
 
 @csrf_exempt
