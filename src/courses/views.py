@@ -4,7 +4,7 @@ from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
-from courses.models import Course, TeachersTeachCourses
+from courses.models import Course, TeachersTeachCourses, StudentAttendCourses
 from lectures.models import Lecture 
 from datetime import datetime, timedelta
 
@@ -71,7 +71,58 @@ def add_courses(request):
 			return JsonResponse({"status": "Done"})
 		except:
 			return JsonResponse({'status':'failure'})
-	 
+
+
+@csrf_exempt
+def add_student(request):
+	if request.method == 'POST':
+		# print(request.META['HTTP_AUTHORIZATION'])
+		try:
+			token = request.META['HTTP_AUTHORIZATION']
+			decoded_token = auth.verify_id_token(token)
+			uid = decoded_token['uid']
+			user = auth.get_user(uid)
+			# display_name = user.displayName.split(" ")
+			django_user = User.objects.get(email = user.email)
+			if django_user.profile.is_student:
+				student = django_user.profile.student
+				course_json = json.loads(request.body.decode('utf-8'))
+				code = course_json['code']
+				course = TeachersTeachCourses.objects.get(student_code = code)
+				StudentAttendCourses.objects.create(student = student, course = course)
+
+			return JsonResponse({'status': 'Success'})
+		except:
+			return JsonResponse({'status': 'Fail'})
+
+	else:
+		return JsonResponse({'status': 'Fail'})
+
+@csrf_exempt
+def add_ta(request):
+	if request.method == 'POST':
+		# print(request.META['HTTP_AUTHORIZATION'])
+		try:
+			token = request.META['HTTP_AUTHORIZATION']
+			decoded_token = auth.verify_id_token(token)
+			uid = decoded_token['uid']
+			user = auth.get_user(uid)
+			# display_name = user.displayName.split(" ")
+			django_user = User.objects.get(email = user.email)
+			if django_user.profile.is_teacher:
+				teacher = django_user.profile.teacher
+				course_json = json.loads(request.body.decode('utf-8'))
+				code = course_json['code']
+				course = TeachersTeachCourses.objects.get(ta_code = code)
+				course.teaching_assistants.add(teacher)
+
+			return JsonResponse({'status': 'Success'})
+		except:
+			return JsonResponse({'status': 'Fail'})
+
+	else:
+		return JsonResponse({'status': 'Fail'})
+
 
 
 
