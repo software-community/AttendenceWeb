@@ -2,7 +2,7 @@ from django.conf import settings
 from rest_framework import serializers
 from django.core import serializers as dserializers
 from .models import Profile, Student, Teacher
-from courses.models import TeachersTeachCourses
+from courses.models import TeachersTeachCourses, StudentAttendCourses
 
 import datetime
 from lectures.models import Lecture, StudentsAttendLectures
@@ -31,10 +31,11 @@ class StudentSerializer(serializers.ModelSerializer):
 		"""
 		Gets the list of courses the student is enrolled in
 		"""
-		queryset = list(TeachersTeachCourses.objects.filter(students = instance).values('id', 'course__code'))
-		queryset = [{ 'id': item['id'], \
-		'attendace':(self.get_attendance(item['id'], instance)),\
-		'code': item['course__code']} for item in queryset]
+		queryset = [sac.course for sac in StudentAttendCourses.objects.filter(student = instance)]
+		print(queryset)
+		queryset = [{ 'id': item.id, \
+		'attendace':(self.get_attendance(item.id, instance)),\
+		'code': item.course.code} for item in queryset]
 		return queryset
 
 	def get_lecture_done(self, instance):
