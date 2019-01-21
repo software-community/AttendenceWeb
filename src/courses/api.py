@@ -20,6 +20,10 @@ from rest_condition import Or
 
 from .serializers import CourseSerializer, TeachersTeachCoursesSerializer
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from lectures.models import Lecture, StudentsAttendLectures
 
 class CourseViewSet(viewsets.ModelViewSet):
 	
@@ -41,3 +45,25 @@ class TeachersTeachCoursesViewSet(viewsets.ModelViewSet):
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('teacher', 'course', 'students', 'teaching_assistants')
 	search_fields = ('teacher__user__first_name', 'teacher__user__last_name')
+
+
+class StudentAttendance(APIView):
+
+	authentication_classes = (authentication.SessionAuthentication,)
+	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
+
+	def get(self, request, format = None):
+
+		course_id = request.GET.get('course_id')
+		date = request.GET.get('date')
+
+		lectures = Lecture.objects.filter(course = course_id, begin__date = date)
+		response = []
+		for lecture in lectures:
+			student_att = StudentsAttendLectures.objects.filter(lecture = lecture)
+			att_list = {att.student.student.user.email: att.present for att in student_att}
+			att_list['time'] = lecture.begin.time()
+			response.append(att_list)
+
+		return Response(response)
+

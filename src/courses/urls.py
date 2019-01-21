@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .api import CourseViewSet, TeachersTeachCoursesViewSet
+from .api import CourseViewSet, TeachersTeachCoursesViewSet, StudentAttendance
 
 from rest_framework.routers import DefaultRouter
 
@@ -11,5 +11,6 @@ router.register('ttc', TeachersTeachCoursesViewSet)
 
 urlpatterns = [
 	path('api/', include(router.urls)),
-	path('add-courses/', views.add_courses)
+	path('add-courses/', views.add_courses),
+	path('get-attendance/', StudentAttendance.as_view())
 ]
