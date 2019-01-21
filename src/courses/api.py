@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .models import Course, TeachersTeachCourses
+from .models import Course, TeachersTeachCourses, StudentAttendCourses
 from lectures.permissions import WriteTokenOnly
 
 from rest_framework.response import Response
@@ -64,6 +64,27 @@ class StudentAttendance(APIView):
 			att_list = {att.student.student.user.email: att.present for att in student_att}
 			att_list['time'] = lecture.begin.time()
 			response.append(att_list)
+
+		return Response(response)
+
+
+class TotalStudentAttendance(APIView):
+
+	authentication_classes = (authentication.SessionAuthentication,)
+	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
+
+	def get(self, request, format = None):
+
+		course_id = request.GET.get('course_id')
+		students = [sac.student for sac in StudentAttendCourses.objects.filter(course = course_id)]
+		lectures = Lecture.objects.filter(course = course_id)
+		response = {}
+		for student in students:
+			att = 0
+			for lecture in lectures:
+				student_att = StudentsAttendLectures.objects.get(lecture = lecture, student = student)
+				att += int(student_att.present)
+			response[student.student.user.email] = att*1.0/len(lectures) if len(lectures) > 0 else 0
 
 		return Response(response)
 

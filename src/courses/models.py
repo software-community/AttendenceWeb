@@ -58,7 +58,7 @@ class TeachersTeachCourses(models.Model):
 	def save(self, *args, **kwargs):
 		if not self.student_code:
 			self.student_code = self._unique_student_code()
-		if not self.teacher_code:
+		if not self.ta_code:
 			self.ta_code = self._unique_ta_code()
 
 		super().save(*args, **kwargs)
