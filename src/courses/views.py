@@ -68,7 +68,7 @@ def add_courses(request):
 
 						lecture, created = Lecture.objects.get_or_create(course = ttc, begin = cur_start_datetime, end = cur_end_datetime)
 
-			return JsonResponse({"status": "Success", "student_code": course.student_code, "ta_code": course.ta_code})
+			return JsonResponse({"status": "Success", "student_code": ttc.student_code, "ta_code": ttc.ta_code})
 		except:
 			return JsonResponse({'status':'Fail'})
 
