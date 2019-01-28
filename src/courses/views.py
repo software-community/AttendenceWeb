@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
 from courses.models import Course, TeachersTeachCourses, StudentAttendCourses
-from lectures.models import Lecture 
+from lectures.models import Lecture
 from datetime import datetime, timedelta
 
 
