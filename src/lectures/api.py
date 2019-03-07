@@ -36,11 +36,11 @@ class StudentsAttendLecturesViewSet(viewsets.ModelViewSet):
 	
 	queryset = StudentsAttendLectures.objects.all()
 	serializer_class = StudentsAttendLecturesSerializer
-	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly), IsOwnerOrReadOnly)
+	#authentication_classes = (authentication.SessionAuthentication,)
+	#permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly), IsOwnerOrReadOnly)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
-	filter_fields = ('lecture', 'student',)
+	filter_fields = ('lecture', 'student','id')
 
 class LectureImageViewSet(viewsets.ModelViewSet):
 	
