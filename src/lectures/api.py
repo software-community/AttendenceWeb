@@ -47,7 +47,7 @@ class LectureImageViewSet(viewsets.ModelViewSet):
 	queryset = LectureImage.objects.all()
 	serializer_class = LectureImageSerializer
 	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
+	#permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('lecture', )
