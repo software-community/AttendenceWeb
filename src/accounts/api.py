@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .models import Profile, Student, Teacher
+from .models import Profile, Student, Teacher, StudentImage
 
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -16,7 +16,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.filters import SearchFilter
 
 
-from .serializers import ProfileSerializer, StudentSerializer, TeacherSerializer
+from .serializers import ProfileSerializer, StudentSerializer, TeacherSerializer, StudentImageSerializer
 from lectures.api import LectureViewSet
 
 from rest_condition import Or
@@ -59,3 +59,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
 	search_fields = ('teacher__user__first_name',)
 
 
+class StudentImageViewSet(viewsets.ModelViewSet):
+	
+	queryset = StudentImage.objects.all()
+	serializer_class = StudentImageSerializer
+	authentication_classes = (authentication.SessionAuthentication,)
+	#permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
+	parser_classes = (MultiPartParser, FormParser,)
+	filter_backends = (DjangoFilterBackend, SearchFilter)
+	filter_fields = ('student', )

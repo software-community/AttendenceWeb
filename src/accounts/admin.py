@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Student, Teacher
+from .models import Profile, Student, Teacher, StudentImage
 # Register your models here.
 
 class ProfileAdminModel(admin.ModelAdmin):
@@ -32,3 +32,12 @@ class TeacherAdminModel(admin.ModelAdmin):
 		model = Teacher
 
 admin.site.register(Teacher, TeacherAdminModel)
+
+class StudentImageAdminModel(admin.ModelAdmin):
+
+	list_display = ["student", "id"]
+
+	class Meta:
+		model = StudentImage
+
+admin.site.register(StudentImage, StudentImageAdminModel)

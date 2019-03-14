@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .api import ProfileViewSet, StudentViewSet, TeacherViewSet
+from .api import ProfileViewSet, StudentViewSet, TeacherViewSet, StudentImageViewSet
 
 from rest_framework.routers import DefaultRouter
 
@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register('profile', ProfileViewSet)
 router.register('student', StudentViewSet)
 router.register('teacher', TeacherViewSet)
+router.register('student-image', StudentImageViewSet)
 
 
 urlpatterns = [

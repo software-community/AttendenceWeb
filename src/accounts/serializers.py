@@ -1,7 +1,7 @@
 from django.conf import settings
 from rest_framework import serializers
 from django.core import serializers as dserializers
-from .models import Profile, Student, Teacher
+from .models import Profile, Student, Teacher, StudentImage
 from courses.models import TeachersTeachCourses, StudentAttendCourses
 
 import datetime
@@ -74,7 +74,11 @@ class StudentSerializer(serializers.ModelSerializer):
 		return total_att*1.0/len(att) if len(att) > 0 else 0.0
 
 
+class StudentImageSerializer(serializers.ModelSerializer):
 
+	class Meta:
+		model = StudentImage
+		fields = '__all__'
 
 
 class TeacherSerializer(serializers.ModelSerializer):
