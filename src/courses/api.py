@@ -58,16 +58,12 @@ class StudentAttendance(APIView):
 		date = request.GET.get('date')
 
 		lectures = Lecture.objects.filter(course = course_id, begin__date = date)
-		response = {}
-		if lectures.exists():
-			response['codes'] = {'student_code': lectures[0].course.student_code,
-									'ta_code': lectures[0].course.student_code}
-		response['att_list'] = []
+		response = []
 		for lecture in lectures:
 			student_att = StudentsAttendLectures.objects.filter(lecture = lecture)
-			att_list = {att.student.student.user.email: [att.present, att.id] for att in student_att}
+			att_list = {att.student.student.user.email: [att.present,att.id] for att in student_att}
 			att_list['time'] = lecture.begin.time()
-			response['att_list'].append(att_list)
+			response.append(att_list)
 
 		return Response(response)
 
