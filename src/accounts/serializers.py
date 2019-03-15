@@ -94,7 +94,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 		"""
 		Gets the list of courses the student is enrolled in
 		"""
-		queryset = list(TeachersTeachCourses.objects.filter(teacher = instance).values('id', 'course__code', 'course__name').annotate(students_count=Count('students')))
+		queryset = list(TeachersTeachCourses.objects.filter(teacher = instance).values('id', 'course__code', 'course__name', 'student_code', 'ta_code').annotate(students_count=Count('students')))
 		# queryset = [{
 		# 'id': item['id'],
 		# 'course_code': item['course__code'],

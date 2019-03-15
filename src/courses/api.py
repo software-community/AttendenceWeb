@@ -61,7 +61,7 @@ class StudentAttendance(APIView):
 		response = []
 		for lecture in lectures:
 			student_att = StudentsAttendLectures.objects.filter(lecture = lecture)
-			att_list = {att.student.student.user.email: [att.present,att.id] for att in student_att}
+			att_list = {att.student.student.user.email: [att.present, att.id] for att in student_att}
 			att_list['time'] = lecture.begin.time()
 			response.append(att_list)
 
