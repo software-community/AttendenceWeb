@@ -1,2 +1,3 @@
-privatekey_firebase.json
-client_id_firebase.json
+src/privatekey_firebase.json
+src/client_id_firebase.json
+.vscode
