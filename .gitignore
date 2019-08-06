@@ -1,2 +1,4 @@
 src/privatekey_firebase.json
 .vscode
+**/*.pyc
+**/*.pyo
