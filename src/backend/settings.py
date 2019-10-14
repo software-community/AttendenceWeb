@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +25,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ys4^$654s-uz%fizl%w0*0hz3wh%v0nsaq+i!oyov+u_3xxj2m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if(os.environ.get('ENV', 'DEV') == 'DEV'):
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -140,5 +145,5 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import auth
 
-cred = credentials.Certificate('privatekey_firebase.json')
+cred = credentials.Certificate(os.environ.get('FIREBASE_KEY_PATH', 'privatekey_firebase.json'))
 default_app = firebase_admin.initialize_app(cred)
