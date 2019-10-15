@@ -14,7 +14,7 @@ def get_file_path(instance, filename):
 
 class Profile(models.Model):
 
-	user = models.OneToOneField(User, on_delete = models.CASCADE)
+	user = models.ForeignKey(User, on_delete = models.CASCADE)
 	is_student = models.BooleanField(default = False)
 	is_teacher = models.BooleanField(default = False)	
 
