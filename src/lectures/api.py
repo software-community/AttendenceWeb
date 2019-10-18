@@ -27,7 +27,7 @@ class LectureViewSet(viewsets.ModelViewSet):
 	queryset = Lecture.objects.all()
 	serializer_class = LectureSerializer
 	authentication_classes = (authentication.SessionAuthentication,)
-	permission_classes = (Or(permissions.IsAdminUser, WriteTokenOnly),)
+	permission_classes = (Or(permissions.IsAdminUser, IsOwnerOrReadOnly),)
 	parser_classes = (MultiPartParser, FormParser,)
 	filter_backends = (DjangoFilterBackend, SearchFilter)
 	filter_fields = ('course', 'begin')

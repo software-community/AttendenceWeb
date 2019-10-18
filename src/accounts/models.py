@@ -39,7 +39,7 @@ class Teacher(models.Model):
 	teacher = models.OneToOneField(Profile, on_delete = models.CASCADE)
 
 	def __str__(self):
-		return self.teacher.user.username
+		return self.teacher.user.get_full_name() + '_' + self.teacher.user.email
 
 class StudentImage(models.Model):
 

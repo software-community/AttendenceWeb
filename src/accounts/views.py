@@ -37,19 +37,29 @@ def tokenAuth(request):
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        token = request.META['HTTP_AUTHORIZATION']
-        data = request.body.decode('utf-8')
-        data = json.loads(data)
-        is_student = data.get('is_student')
-        is_teacher = data.get('is_teacher')
-        
-        decoded_token = auth.verify_id_token(token)
-        uid = decoded_token['uid']
-        user = auth.get_user(uid)
-        django_user, _ = User.objects.get_or_create(
-            email=user.email, username=user.uid)
+        try:
+            token = request.META['HTTP_AUTHORIZATION']
+            data = request.body.decode('utf-8')
+            data = json.loads(data)
+            is_student = data.get('is_student')
+            is_teacher = data.get('is_teacher')
 
-        profile, created = Profile.objects.get_or_create(
-            user=django_user, is_student=is_student, is_teacher=is_teacher)
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token['uid']
+            user = auth.get_user(uid)
+            django_user, _ = User.objects.get_or_create(
+                email=user.email, username=user.uid)
 
-        return JsonResponse({"profile_id": profile.id, "is_student": profile.is_student, "is_teacher": profile.is_teacher})
+            profile, created = Profile.objects.get_or_create(
+                user=django_user, is_student=is_student, is_teacher=is_teacher)
+
+            _id = None
+            if(is_student):
+                _id = Student.objects.get(student=profile).id
+            elif(is_teacher):
+                _id = Teacher.objects.get(teacher=profile).id
+
+            return JsonResponse({'status': 'ok', "_id": _id, "is_student": profile.is_student, "is_teacher": profile.is_teacher})
+        except Exception as err:
+            print(err)
+            return JsonResponse({'status': 'error'})

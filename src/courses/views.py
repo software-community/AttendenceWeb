@@ -21,15 +21,11 @@ import json
 def add_courses(request):
 	if request.method == 'POST':
 		try:
-			print(request.body)
 			token = request.META['HTTP_AUTHORIZATION']
 			decoded_token = auth.verify_id_token(token)
 			uid = decoded_token['uid']
 			user = auth.get_user(uid)
-			django_user, created = User.objects.get_or_create(email = user.email, defaults = {
-				'username': user.email,
-				'password': 'iitropar',
-			})
+			django_user = User.objects.get(email = user.email)
 			profile = django_user.profile
 			# Check if the user is a teacher
 			if profile.is_teacher == False:
@@ -39,8 +35,7 @@ def add_courses(request):
 
 			days_list = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 			
-			course_json = request.body.decode('utf-8') # Body dekh lio kaise milti hai
-			print(request.body)
+			course_json = request.body.decode('utf-8')
 			course_json = json.loads(course_json)
 			course, created = Course.objects.get_or_create(code = course_json['course_code'], defaults = {
 				'name': course_json['course_name']})
