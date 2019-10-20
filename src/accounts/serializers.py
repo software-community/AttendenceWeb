@@ -113,7 +113,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         today = datetime.datetime.now().date()
 
         lectures = Lecture.objects.filter(course__teacher=instance, begin__date=today, begin__lte=today_time).annotate(
-            time=TruncTime('begin')).values('id', 'time', 'course', code=F('course__course__code'))
+            time=TruncTime('begin')).values('id', 'time', 'course', code=F('course__course__code'), type=F('lecture_type'))
         return list(lectures)
 
     def get_lecture_pending(self, instance):
@@ -123,5 +123,5 @@ class TeacherSerializer(serializers.ModelSerializer):
         today_time = datetime.datetime.now()
         today = datetime.datetime.now().date()
         lectures = Lecture.objects.filter(course__teacher=instance, begin__date=today, begin__gt=today_time).annotate(
-            time=TruncTime('begin')).values('id', 'time', 'course', code=F('course__course__code'))
+            time=TruncTime('begin')).values('id', 'time', 'course', code=F('course__course__code'), type=F('lecture_type'))
         return list(lectures)
