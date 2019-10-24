@@ -9,7 +9,7 @@ from django.utils.timezone import make_aware
 
 from courses.models import Course, TeachersTeachCourses, StudentAttendCourses
 from lectures.models import Lecture
-from accounts.models import Profile
+from accounts.models import Profile, Student
 
 
 # Google AUTH
@@ -76,24 +76,28 @@ def add_courses(request):
 @csrf_exempt
 def add_student(request):
     if request.method == 'POST':
-        # print(request.META['HTTP_AUTHORIZATION'])
         try:
             token = request.META['HTTP_AUTHORIZATION']
             decoded_token = auth.verify_id_token(token)
             uid = decoded_token['uid']
             user = auth.get_user(uid)
-            # display_name = user.displayName.split(" ")
+
             django_user = User.objects.get(email=user.email)
-            if django_user.profile.is_student:
-                student = django_user.profile.student
+            profile = Profile.objects.filter(user=django_user, is_student=True)
+            if profile:
+                student = Student.objects.get(student=profile[0])
                 course_json = json.loads(request.body.decode('utf-8'))
                 code = course_json['code']
                 course = TeachersTeachCourses.objects.get(student_code=code)
-                StudentAttendCourses.objects.create(
+                _, created = StudentAttendCourses.objects.get_or_create(
                     student=student, course=course)
+                if created:
+                    return JsonResponse({'status': 'ok', 'new': 'no'})
+                return JsonResponse({'status': 'ok', 'new': 'yes'})
 
-            return JsonResponse({'status': 'Success'})
-        except:
+            return JsonResponse({'status': 'Fail'})
+        except Exception as err:
+            print(err)
             return JsonResponse({'status': 'Fail'})
 
     else:
